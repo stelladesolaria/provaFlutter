@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'core/theme.dart';
-//import 'core/routes.dart';
+import 'core/theme.dart';
+import 'core/routes.dart';
 import 'services/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -28,4 +28,18 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+import 'pages/auth/login_page.dart';
+import 'pages/home/home_page.dart';
+
+class LoginPageRedirect extends StatelessWidget {
+  const LoginPageRedirect({super.key});
+  @override
+  Widget build(BuildContext context) => const LoginPage();
+}
+
+class HomeRedirect extends StatelessWidget {
+  const HomeRedirect({super.key});
+  @override
+  Widget build(BuildContext context) => const HomePage();
 }
