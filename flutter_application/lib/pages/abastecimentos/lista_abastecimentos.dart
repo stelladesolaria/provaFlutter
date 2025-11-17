@@ -12,23 +12,40 @@ class ListaAbastecimentosPage extends StatelessWidget {
       body: StreamBuilder(
         stream: service.streamAbastecimentos(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) return const Center(child: Text('Nenhum abastecimento'));
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('Nenhum abastecimento'));
+          }
+
           final docs = snapshot.data!.docs;
+
           return ListView.builder(
             itemCount: docs.length,
             itemBuilder: (context, i) {
               final a = docs[i];
+              final data = a.data() as Map<String, dynamic>;
+
               return ListTile(
-                title: Text(a['veiculoId'] ?? ''),
-                subtitle: Text('Litros: \${a['quantidadeLitros'] ?? ''} - R\$ \${a['valorPago'] ?? ''}'),
-                trailing: IconButton(icon: const Icon(Icons.delete), onPressed: () => service.deleteAbastecimento(a.id)),
+                title: Text(data['veiculoId'] ?? ''),
+                subtitle: Text(
+                  'Litros: ${data['quantidadeLitros']} - R\$ ${data['valorPago']}',
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => service.deleteAbastecimento(a.id),
+                ),
               );
             },
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () => Navigator.pushNamed(context, '/novo-abastecimento'), child: const Icon(Icons.add)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/novo-abastecimento'),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

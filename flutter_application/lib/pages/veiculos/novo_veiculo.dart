@@ -30,7 +30,7 @@ class _NovoVeiculoPageState extends State<NovoVeiculoPage> {
           const SizedBox(height: 8),
           TextField(controller: ano, decoration: const InputDecoration(labelText: 'Ano'), keyboardType: TextInputType.number),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(value: tipo, items: ['Gasolina','Etanol','Flex','Diesel'].map((e)=>DropdownMenuItem(value:e,child:Text(e))).toList(), onChanged: (v)=>setState(()=>tipo=v!)),
+          DropdownButtonFormField<String>(initialValue: tipo, items: ['Gasolina','Etanol','Flex','Diesel'].map((e)=>DropdownMenuItem(value:e,child:Text(e))).toList(), onChanged: (v)=>setState(()=>tipo=v!)),
           const SizedBox(height: 12),
           ElevatedButton(onPressed: () async {
             final a = int.tryParse(ano.text) ?? 0;

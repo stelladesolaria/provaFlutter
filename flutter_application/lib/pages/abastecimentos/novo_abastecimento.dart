@@ -1,35 +1,51 @@
 import 'package:flutter/material.dart';
 import '../../services/firestore_service.dart';
 
-class ListaAbastecimentosPage extends StatelessWidget {
+class NovoAbastecimentoPage extends StatefulWidget {
+  const NovoAbastecimentoPage({super.key});
+
+  @override
+  State<NovoAbastecimentoPage> createState() => _NovoAbastecimentoPageState();
+}
+
+class _NovoAbastecimentoPageState extends State<NovoAbastecimentoPage> {
   final service = FirestoreService();
-  ListaAbastecimentosPage({super.key});
+
+  final litros = TextEditingController();
+  final valor = TextEditingController();
+  final quilometragem = TextEditingController();
+  final veiculoId = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Histórico de Abastecimentos')),
-      body: StreamBuilder(
-        stream: service.streamAbastecimentos(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) return const Center(child: Text('Nenhum abastecimento'));
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: docs.length,
-            itemBuilder: (context, i) {
-              final a = docs[i];
-              return ListTile(
-                title: Text(a['veiculoId'] ?? ''),
-                subtitle: Text('Litros: \${a['quantidadeLitros'] ?? ''} - R\$ \${a['valorPago'] ?? ''}'),
-                trailing: IconButton(icon: const Icon(Icons.delete), onPressed: () => service.deleteAbastecimento(a.id)),
-              );
-            },
-          );
-        },
+      appBar: AppBar(title: const Text('Novo Abastecimento')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(controller: veiculoId, decoration: const InputDecoration(labelText: 'ID do Veículo')),
+            TextField(controller: litros, decoration: const InputDecoration(labelText: 'Litros'), keyboardType: TextInputType.number),
+            TextField(controller: valor, decoration: const InputDecoration(labelText: 'Valor Pago'), keyboardType: TextInputType.number),
+            TextField(controller: quilometragem, decoration: const InputDecoration(labelText: 'Quilometragem'), keyboardType: TextInputType.number),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await service.addAbastecimento({
+                  'veiculoId': veiculoId.text,
+                  'quantidadeLitros': double.tryParse(litros.text) ?? 0,
+                  'valorPago': double.tryParse(valor.text) ?? 0,
+                  'quilometragem': double.tryParse(quilometragem.text) ?? 0,
+                  'data': DateTime.now(),
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () => Navigator.pushNamed(context, '/novo-abastecimento'), child: const Icon(Icons.add)),
     );
   }
 }
-

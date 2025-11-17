@@ -3,6 +3,8 @@ import 'core/theme.dart';
 import 'core/routes.dart';
 import 'services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'pages/auth/login_page.dart';
+import 'pages/home/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,8 +31,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-import 'pages/auth/login_page.dart';
-import 'pages/home/home_page.dart';
+
 
 class LoginPageRedirect extends StatelessWidget {
   const LoginPageRedirect({super.key});
